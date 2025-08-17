@@ -1,4 +1,4 @@
-# Google Colab ではじめる、Gemini API のはじめ方
+# Google Colab ではじめる Gemini API、環境を準備しよう。
 
 「Google の AI、Gemini を自分のプログラムで使ってみたいけど、何からはじめればいいか分からない…」
 
