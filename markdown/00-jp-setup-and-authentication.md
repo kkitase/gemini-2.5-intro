@@ -1,13 +1,20 @@
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/kkitase/gemini-2.5-findy/blob/main/notebooks/00-jp-setup-and-authentication.ipynb)
+# Google Colab ではじめる、Gemini API のはじめ方
 
-# パート 1: セットアップと認証
+「Google の AI、Gemini を自分のプログラムで使ってみたいけど、何からはじめればいいか分からない…」
 
-## 0. Google AI Studio 
+そんな風に思っていませんか？この記事では、開発の第一歩となる「API キーの取得」から、Gemini を動かすための基本について、ハンズオン形式で学びます。[「Google Colab」](https://colab.research.google.com/) を使って、サンプルコードを実行しながら進めるので、プログラミング初心者の方でも安心です。
 
-[Google AI Studio](https://aistudio.google.com/) は、Google の Gemini モデルを素早く試すことができる開発者向けプラットフォームです。使いやすいインターフェースでプロンプトの作成やテスト、モデルのパラメータ調整を行い、そのコードを簡単にエクスポートしてご自身のアプリケーションに組み込むことができます。SDK を使って本格的なコーディングを始める前に、Google の AI モデルの能力を試したり、プロトタイプを作成したりするのに最適なツールです。このワークショップでは、API キーを取得するために `Google AI Studio` を使用します。
+Gemini API を利用する環境には、手軽に試せる[「Google AI Studio」](https://aistudio.google.com/)と、企業向けの高機能な[「Vertex AI」](https://cloud.google.com/vertex-ai)があります。このハンズオンでは、Google AI Studio を使って API キーを取得し、プロトタイピングの第一歩を踏み出します。
+
 ![alt text](../assets/00-0-1.png)
 
-## １. Gemini API キーを入手し、Google Colab に設定する
+以下のボタンから Notebook を開いて進めましょう。
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/kkitase/gemini-2.5-findy/blob/main/notebooks/00-jp-setup-and-authentication.ipynb)
+
+以降の解説は、Google Colab で実際にコードを実行しながら進めることを想定していますが、コードと解説を読み進めるだけでも学習できます。
+
+## 1. Gemini API キーを入手し、Google Colab に設定する
 
 まずは、Gemini API キーを入手し、Google Colab に設定します。
 
@@ -19,9 +26,10 @@
 5.  `GEMINI_API_KEY` の「値 (Value)」入力欄に、先ほど作成した Gemini API キーをコピーして貼り付けます。
 6.  左側にあるトグルボタンをオンに切り替えて、すべてのノートブックがこのシークレットにアクセスできるように許可します。
 
-## 2. SDK をインストールする
+## 2. Google Gen AI SDK をインストールする
 
-次に、Google Colab の環境に Google の Generative AI SDK をインストールします。Google Colab の環境で以下のコマンドを実行するだけです。（すでにコマンドは記載されているので、実行ボタンを押すだけです。）
+次に、Google Colab の環境に Google の Google Gen AI SDK をインストールします。Google Colab の環境で以下のコマンドを実行するだけです。（すでにコマンドは記載されているので、実行ボタンを押すだけです。）
+
 
 ```python
 %pip install -U -q 'google-genai>=1.0.0'
@@ -30,6 +38,7 @@
 ## 3. クライアントの設定と生成のテスト
 
 それでは、Gemini API を使って、テキストを生成してみましょう。
+
 
 ```python
 from google import genai
