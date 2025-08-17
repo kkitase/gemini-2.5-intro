@@ -26,7 +26,6 @@
 ```python
 %pip install -U -q 'google-genai>=1.0.0'
 ```
-![alt text](../assets/00-2-1.png)
 
 ## 3. クライアントの設定と生成のテスト
 
@@ -69,8 +68,8 @@ print(response.text)
 | Gemini 2.5 Flash | `gemini-2.5-flash` |
 | Gemini 2.5 Pro | `gemini-2.5-pro` |
 
-## 5. Google Colab と Gemini
-Google Colab は Gemini が統合され、コードの説明をしたり、デバッグするのに役立ちます。
+## 5. Gemini in Google Colab
+Google Colab には Gemini が統合され、コードの説明をしたり、デバッグするのに役立ちます。
 
 1. 先ほどのコードを説明を Gemini にしてもらいましょう。コードを選択して、セクションの右上部にある Gemini ボタンを押すと、画面下部にコードの説明が表示されます。（画面右に表示するには、パネルに移動ボタンを押します。）
 ![alt text](../assets/00-5-1.png)
