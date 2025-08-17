@@ -1,13 +1,10 @@
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/philschmid/gemini-2.5-ai-engineering-workshop/blob/main/notebooks/00-setup-and-authentication.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://github.com/kkitase/gemini-2.5-findy/blob/main/notebooks/00-jp-setup-and-authentication.ipynb)
 
 # パート 1: セットアップと認証
 
 ## 0. Google AI Studio 
 
 [Google AI Studio](https://aistudio.google.com/) は、Google の Gemini モデルを素早く試すことができる開発者向けプラットフォームです。使いやすいインターフェースでプロンプトの作成やテスト、モデルのパラメータ調整を行い、そのコードを簡単にエクスポートしてご自身のアプリケーションに組み込むことができます。SDK を使って本格的なコーディングを始める前に、Google の AI モデルの能力を試したり、プロトタイプを作成したりするのに最適なツールです。このワークショップでは、API キーを取得するために `Google AI Studio` を使用します。
-
-![Google AI Studio](../assets/1-0-ai-studio.png)
-
 
 ## １. Gemini API キーを入手し、Google Colab に設定する
 
