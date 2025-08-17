@@ -1,11 +1,19 @@
+# Google Colab ではじめる、テキストの生成とチャットの作り方
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/philschmid/gemini-2.5-ai-engineering-workshop/blob/main/notebooks/01-text-generation-and-chat.ipynb)
+ここでは、Google Gen AI SDK を使用した Gemini API によるテキストの生成について、ハンズオン形式で学びます。具体的には、基本的なプロンプト、チャットの対話、ストリーミング、設定について解説します。
 
-# パート1 - テキスト生成とチャット
+以下のボタンから Notebook を開いて進めましょう。
 
-このパートでは、`google-genai` SDK を使用した Gemini API によるテキスト生成に焦点を当て、基本的なプロンプト、チャットの対話、ストリーミング、設定について説明します。
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/kkitase/gemini-2.5-findy/blob/main/notebooks/01-jp-text-generation-and-chat-jp.ipynb)
 
-[セットアップと認証](solution_00_setup_and_authentication.md) のセクションを完了していることを確認してください。
+以降の解説は、Google Colab で実際にコードを実行しながら進めることを想定していますが、コードと解説を読み進めるだけでも学習できます。
+
+[セットアップと認証](00-jp-setup-and-authentication.ipynb) のセクションを完了していることを確認してください。
+
+## 1. 最初のプロンプト
+
+まず、Gemini モデルと対話するためにノートブック全体で使用するクライアントオブジェクトを初期化します。
+
 
 ```python
 from google import genai
@@ -21,56 +29,52 @@ else:
     GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY',None)
 
 # APIキーでクライアントを作成
-MODEL_ID = "gemini-2.5-flash-preview-05-20"
+MODEL_ID = "gemini-2.5-flash"
 client = genai.Client(api_key=GEMINI_API_KEY)
 ```
 
-## 1. 最初のプロンプトを送信する
+次に、プロンプトを作成して、テキストを生成します。
+
 
 ```python
-prompt = "サステナビリティを重視した新しいコーヒーショップの名前を3つ作成してください。"
+prompt = "都会に住む人をターゲットにした新しいサウナの名前を 3 つ作成してください。"
 
 response = client.models.generate_content(
     model=MODEL_ID,
     contents=prompt
 )
 
-print("Geminiからの応答:")
+print("Gemini からの応答:")
 print(response.text)
 ```
 
-#### !! 演習: さまざまなプロンプトを送信する !!
-
-さまざまな種類のプロンプトをGeminiモデルに送信し、その応答を観察する練習をします。利用可能な場合は、異なるモデルバージョンを試すこともできます。
-
-タスク:
-- ロボットについての短い詩を生成するようにGeminiに依頼するプロンプトを作成します。
-- 「機械学習」を簡単な言葉で説明するようにGeminiに依頼するプロンプトを作成します。
-- 他のモデル（例：`gemini-2.0-flash`）を試し、プロンプトを送信して結果を比較します。
 
 ```python
-# TODO:
+# TODO: 
+# さまざまなプロンプトを送信してみましょう。
+#
 ```
 
 ## 2. トークンの理解とカウント
 
-トークンは、Geminiモデルがテキストを処理するために使用する基本的な単位です。トークンの使用状況を理解することは、次の点で重要です。
+トークンは、Gemini モデルがテキストを処理するために使用する基本的な単位です。トークンの使用状況を理解することは、次の点で重要です。
 - **コスト管理**: 請求はトークン消費量に基づいています
-- **コンテキスト制限**: モデルには最大トークン制限があります（例：Gemini 2.5 Proの場合は100万トークン）
+- **コンテキスト制限**: モデルには最大トークン制限があります（例：Gemini 2.5 Pro の場合は 100 万トークン）
 - **パフォーマンスの最適化**: 入力が小さいほど、一般的に処理が高速になります
 
-Geminiモデルの場合、1トークンは約4文字に相当し、100トークンは約60〜80の英単語に相当します。
+Gemini モデルの場合、1 トークンは約英数字 4 文字に相当し、100 トークンは約 60 〜 80 の英単語に相当します。
 
-### 生成前のトークンをカウントする
+### 送信前のトークンをカウント
 
 モデルに送信する前に入力のトークンをカウントして、コストを見積もり、制限内に収まるようにすることができます。
 
-```python
-prompt = "The quick brown fox jumps over the lazy dog."
 
+```python
 # 入力のトークンをカウントする
-# TODO: client.models.count_tokens() メソッドを呼び出します。
-# MODEL_IDとプロンプトを渡すようにしてください。
+prompt = "あなたはサウナについて専門知識を持っています。サウナで、ととのうとはどういうことですか？"
+
+# TODO: 
+# client.models.count_tokens() メソッドを呼び出します。下記のコードを修正して、MODEL_ID と prompt を渡すようにしてください。
 # token_count = client.models.count_tokens(
 #     model=...,
 #     contents=...
@@ -82,19 +86,20 @@ estimated_cost = token_count.total_tokens * 0.15 / 1_000_000
 print(f"推定入力コスト: ${estimated_cost:.6f}")
 ```
 
-### 生成後のトークンをカウントする
+### 送信後のトークンをカウント
 
-コンテンツを生成した後、詳細なトークン使用状況情報にアクセスできます。
+テキストを生成した後、詳細なトークン使用状況情報にアクセスできます。
+
 
 ```python
-prompt = "人工知能についての俳句を詠んでください。"
+prompt = "サウナでととのった後に飲む飲み物を 3 つ提案して。"
 
 response = client.models.generate_content(
     model=MODEL_ID,
     contents=prompt
 )
 
-print(f"生成された俳句:\n{response.text}\n")
+print(f"提案:\n{response.text}\n")
 
 # トークン使用メタデータにアクセスする
 usage = response.usage_metadata
@@ -107,42 +112,47 @@ total_cost = (usage.prompt_token_count * 0.15 + (usage.candidates_token_count + 
 print(f"合計推定コスト: ${total_cost:.6f}")
 ```
 
-## 3. `contents` によるテキスト理解
+## 3. テキスト生成の基本
 
-テキストを生成する最も簡単な方法は、モデルにテキストのみのプロンプトを提供することです。 `contents` は、単一のプロンプト、プロンプトのリスト、またはマルチモーダル入力の組み合わせにすることができます。
+テキストを生成する最も簡単な方法は、モデルにテキストのみのプロンプトを提供することです。 `contents` は、単一のプロンプト、リスト、またはマルチモーダル入力の組み合わせにすることができます。
+
 
 ```python
-response_capital = client.models.generate_content(
+response_sauna_origin = client.models.generate_content(
     model=MODEL_ID,
-    contents="フランスの首都はどこですか？"
+    contents="サウナの発祥はどこですか？"
 )
-print(f"Q: フランスの首都はどこですか？\nA: {response_capital.text}")
+print(f"質問: サウナの発祥はどこですか？\nA: {response_sauna_origin.text}")
 ```
+
 
 ```python
-# TODO: client.models.generate_content() メソッドを呼び出します。
-# contentsには、文字列のリストを指定します。
-# 1. "ビーガンレストランの名前を3つ作成してください"
-# 2. "都市: ベルリン"
-# response_restaurant_berlin = client.models.generate_content(
-#     model=MODEL_ID,
-#     contents=[...]
-# )
-print(f"\nベルリンのビーガンレストラン名:\n{response_restaurant_berlin.text}")
+response_gnocchi_tokyo = client.models.generate_content(
+    model=MODEL_ID,
+    contents=["新しいニョッキ専門レストランの名前を考えて", "city: tokyo"]
+)
+print(f"\n東京のニョッキ レストラン:\n{response_gnocchi_tokyo.text}")
 ```
 
-## 4. ストリーミング応答
 
-ストリーミングを使用すると、生成される応答を増分的に受信できるため、長い応答やチャットボットなどのリアルタイムアプリケーションで、より優れたユーザーエクスペリエンスを提供できます。
+```python
+# TODO:
+# さまざまなテキストプロンプトを送信してみましょう。
+#
+```
+
+## 4. ストリーミング
+
+ストリーミングを使用すると、生成される応答を少しずつ受け取ることできるため、長い応答やチャットボットなどのリアルタイム アプリケーションで、より優れたユーザー体験を提供できます。
 
 **ストリーミングを使用する場合:**
-- インタラクティブなアプリケーション（チャットボット、アシスタント）
+- インタラクティブなアプリケーション（チャットボットなど）
 - 長いコンテンツの生成
-- リアルタイムのユーザーフィードバック
-- 体感パフォーマンスの向上
+- ユーザー体験の向上
+
 
 ```python
-prompt_long_story = "勇敢な騎士とフレンドリーなドラゴンについての短編小説を書いてください。"
+prompt_long_story = "サウナ好きの主人公が、何らかの理由でファンタジー風の異世界へ行き、そこで新たな人生をスタートさせる物語を書いてください。"
 
 print("ストリーミング応答:")
 for chunk in client.models.generate_content_stream(
@@ -156,23 +166,39 @@ print("\n")  # 最後に改行を追加
 
 ## 5. チャット（マルチターン会話）
 
-SDKチャットクラスは、会話履歴を追跡するためのインターフェースを提供します。内部的には、同じ `generate_content` メソッドを使用しています。
+chat クラスは、会話履歴を追跡するためのインターフェースを提供します。内部的には、`generate_content` メソッドを使用しています。つまり、chat_session.send_message() を呼び出すたびに、内部では「これまでの全会話」を毎回 generate_content に送り直すという、作業が自動的に行われています。
+
 
 ```python
 chat_session = client.chats.create(model=MODEL_ID)
 
-user_message1 = "週末旅行を計画しています。ヨーロッパでのシティブレイクにおすすめはありますか？"
+user_message1 = "ヨーロッパ旅行を計画しています。おすすめはありますか？"
 print(f"ユーザー: {user_message1}")
 response1 = chat_session.send_message(message=user_message1)
 print(f"モデル: {response1.text}\n")
 ```
 
+
 ```python
-user_message2 = "歴史とおいしい食べ物が好きです。あまり高価でないものがいいです。"
+user_message2 = "ニョッキが好きです。あまり高価じゃないものがいいです。"
 print(f"ユーザー: {user_message2}")
-# TODO: user_message2 を使用して chat_session.send_message() メソッドを呼び出します。
-# response2 = chat_session.send_message(message=...)
+response2 = chat_session.send_message(message=user_message2)
+print(f"モデル: {response2.text}\n")
 ```
+
+
+```python
+user_message3 = "サウナはありますか？"
+print(f"ユーザー: {user_message3}")
+```
+
+
+```python
+# TODO: 
+# さらに会話を続けましょう
+# 
+```
+
 
 ```python
 # 会話履歴を表示
@@ -180,83 +206,112 @@ history = chat_session.get_history()
 print(f"会話の合計メッセージ数: {len(history)}")
 ```
 
-## 6. システムインストラクション
+## 6. システム インストラクション
 
-システムインストラクションを使用すると、モデルの動作と個性を定義できます。これらは会話全体で一貫して適用されます。
+システム インストラクションを使用すると、モデルの動作と個性を定義できます。これらは会話全体で一貫して適用されます。
 
-**システムインストラクションのベストプラクティス:**
+**システム インストラクションのベスト プラクティス:**
 - 具体的に、明確に
 - 役割とトーンを定義する
 - フォーマットの好みを指定する
 - 行動ガイドラインを設定する
 
-```python
-system_instruction_poet = "あなたは17世紀の有名な詩人で、ソネットを専門としています。弱強五歩格で応答し、雄弁で時代に合った言葉遣いをしてください。"
 
-response_poet = client.models.generate_content(
+```python
+# システム インストラクションを使って、ロールやフォーマットを指定してみましょう。
+
+system_instruction_marketing_pro = """
+# 役割
+あなたは、全く新しいフィットネスブランドを立ち上げる、マーケティングのプロです。
+
+# ガイドライン
+- 常に 3 つの異なる選択肢を提案してください。
+- 抽象的な言葉を避け、ターゲット顧客がイメージしやすい具体的な言葉を選んでください。
+- なぜその名前を提案するのか、論理的な根拠を必ず添えてください。
+
+# フォーマット
+提案は、以下の Markdown 形式を厳守してください。
+
+## 提案1: [ジムの名前]
+- **コンセプト:** (ジムのコンセプトを 1 〜 2 文で説明)
+- **ターゲット層:** (どのような顧客を対象とするか)
+- **ネーミングの由来:** (なぜこの名前にしたのか)
+"""
+
+# システム インストラクションを使ってコンテンツを生成
+response_pro = client.models.generate_content(
     model=MODEL_ID,
-    contents="現代のテクノロジーについてどう思いますか？",
+    contents="全く新しいフィットネスジムとその名前を考えて",
     config=types.GenerateContentConfig(
-        system_instruction=system_instruction_poet
+        system_instruction=system_instruction_marketing_pro
     )
 )
-print(f"\n詩人モデルによる現代技術に関する応答:\n{response_poet.text}")
+
+print(response_pro.text)
 ```
 
-## 7. 生成設定
+## 7. Gemini モデルのパラメータ
 
-設定パラメータを使用して、生成の動作をカスタマイズします。これらを理解することは、特定のユースケースに合わせて応答を微調整するのに役立ちます。
-
-```python
-# 辞書を使用した設定
-generation_config_dict = {
-    "temperature": 0.2,      # 低いほど決定的、高いほど創造的
-    "max_output_tokens": 2000, # 応答の長さを制限
-    "top_p": 0.8,            # Nucleusサンプリング - トークン選択の多様性
-    "top_k": 30,             # 最も可能性の高い上位30トークンを考慮
-
-}
-
-# TODO: client.models.generate_content() を呼び出す
-# MODEL_ID、"環境に優しいスニーカーの新ブランドの非常に短いタグラインを作成してください" というプロンプト、
-# および generation_config_dict を渡します。
-# response_config = client.models.generate_content(
-#     model=...,
-#     contents=...,
-#     config=...
-# )
-```
+Gemini モデルのパラメータを使用して、生成の動作をカスタマイズします。これらを理解することで、応答を微調整することができます。
 
 **パラメータガイド:**
-- **Temperature (0.0-2.0)**: ランダム性を制御します。事実に基づいたコンテンツには0.2〜0.4、創造的なコンテンツには0.7〜1.0を使用します
-- **Top-p (0.0-1.0)**: 多様性を制御します。値が低いほど焦点が絞られ、高いほど多様になります
-- **Top-k**: トークンの選択肢を制限します。値が低いほど焦点が絞られ、高いほど多様になります
-- **Max output tokens**: 過度に長い応答を防ぎ、コストを管理します
+- **Temperature (0.0-2.0)**: 回答の創造性やユニークさを調整します。例：低いと「犬」、高いと「ワンワン星人」のような答え。事実に基づいたコンテンツには 0.2 〜 0.4、創造的なコンテンツには 0.7 〜 1.0 を使用します
+- **Top-p (0.0-1.0)**: 単語候補を確率の合計値で絞り込みます。例：0.9 なら多様な表現、0.1なら定番の言葉を選びます。
+- **Top-k**: 単語候補を確率上位の個数で絞り込みます。例：30 なら候補多数、3 なら鉄板の 3 択の中から選びます。
+- **Max output tokens**: 生成される文章の最大長（文字数）です。例：2000 なら長文、10 なら一言だけの返信になります。
 
-## 8. 長いコンテキストとファイルのアップロード
 
-Gemini 2.5 Proには、100万トークンのコンテキストウィンドウがあります。実際には、100万トークンは次のようになります。
-
-- 50,000行のコード（1行あたり標準80文字）
-- 過去5年間に送信したすべてのテキストメッセージ
-- 平均的な長さの英語の小説8冊
-- 1時間のビデオデータ
-
-File APIを使用すると、ファイルをGemini APIにアップロードし、リクエストのコンテキストとして使用できます。
 
 ```python
-# テキストファイルの例（音声の例よりも信頼性が高い）
+# Gemini モデルのパラメータを使用して、生成の動作をカスタマイズしましょう.
+
+generation_config_dict = {
+    "temperature": 0.5,         #回答の創造性やユニークさを調整します。
+    "max_output_tokens": 2000,  # 生成される文章の最大長（文字数）です。
+    "top_p": 0.5,               # 単語候補を確率の合計値で絞り込みます。
+    "top_k": 20,                # 単語候補を確率上位の個数で絞り込みます。
+}
+
+response_config = client.models.generate_content(
+    model=MODEL_ID,
+    contents="フィットネスジムの名前を考えて",
+    config=generation_config_dict
+)
+
+print(response_config.text)
+```
+
+
+```python
+# TODO:
+# Gemini モデルのパラメータを変えて、生成の動作をカスタマイズしてみましょう。
+# 
+```
+
+## 8. 強大なコンテキストとファイルのアップロード
+
+Gemini 2.5 には、100 万トークンという巨大なコンテキス トウィンドウを持っています。これがどれくらいの情報量かというと、具体的には下記のような例に相当します。
+
+- コード: 50,000 行のコード
+- 過去 5 年間に送信したすべてのテキストメッセージ
+- 平均的な長さの英語の小説 8 冊
+- 約 1 時間の動画データ
+
+Google Colab の File API を使用すると、ファイルを Gemini API にアップロードし、リクエストのコンテキストとして使用できます。
+
+
+```python
 import requests
 
 # サンプルテキストファイルをダウンロード
 sample_text_url = "https://www.gutenberg.org/files/74/74-0.txt"  # トム・ソーヤーの冒険
 response_req = requests.get(sample_text_url)
 
-# ローカルファイルに保存
+# ファイルに保存
 with open("sample_book.txt", "w", encoding="utf-8") as f:
     f.write(response_req.text)
 
-# ファイルをGemini APIにアップロード
+# ファイルを Gemini API にアップロード
 try:
     myfile = client.files.upload(file="sample_book.txt")
     print(f"ファイルが正常にアップロードされました: {myfile.name}")
@@ -264,7 +319,7 @@ try:
     # アップロードされたファイルをコンテキストとして使用してコンテンツを生成
     response = client.models.generate_content(
         model=MODEL_ID, 
-        contents=[myfile, "この本を3つの重要なポイントで要約してください"])
+        contents=[myfile, "この本の要点を 3 つ、箇条書きで簡潔にまとめてください。"])
     
     print("要約:")
     print(response.text)
@@ -277,26 +332,26 @@ except Exception as e:
     print("ファイルが存在し、アクセス可能であることを確認してください")
 ```
 
-## 9. !! 演習: 「本」とチャットする !!
+## 9. 「本」 とチャット
 
-「不思議の国のアリス」という本と「話す」ことができるインタラクティブなチャットセッションを作成します。AIに特定のペルソナを設定し、本のテキストを会話のコンテキストとして使用します。
+「不思議の国のアリス」の本と「話す」ことができるインタラクティブなチャットを作成しましょう。ペルソナを設定し、本のテキストを会話のコンテキストとして使用します。
 
-タスク: 
-- 「不思議の国のアリス」のテキストをダウンロードします（ヘルパーコードブロックが提供されています）。
-- 本のテキストファイル（`alice_in_wonderland.txt`）を `client.files.upload()` を使用してGemini APIにアップロードします。
+- 「不思議の国のアリス」のテキストをダウンロードします。
+- 本のテキストファイル（`alice_in_wonderland.txt`）を `client.files.upload()` を使用して Gemini API にアップロードします。
 - `client.chats.create()` を使用してチャットセッションを作成します。
 - `chat.send_message()` を使用してチャットセッションに最初のメッセージを送信します。
-- チャットセッションに少なくとも1つのフォローアップの質問（例：「音声配信のさまざまな方法を詳しく説明してください」）を送信し、その応答を印刷します。
+- チャットセッションに少なくとも 1 つ質問を送信します。
+
 
 ```python
+# 「不思議の国のアリス」の本とチャットするための準備
 import requests
 
 # 不思議の国のアリスをダウンロード
 book_text_url = "https://www.gutenberg.org/files/11/11-0.txt"
 try:
     response_book_req = requests.get(book_text_url)
-    response_book_req.raise_for_status()  # 不正なステータスコードに対して例外を発生させる
-    
+    response_book_req.raise_for_status()  
     with open("alice_in_wonderland.txt", "w", encoding="utf-8") as f:
         f.write(response_book_req.text)
     print("本が正常にダウンロードされました！")
@@ -305,37 +360,38 @@ except requests.RequestException as e:
     print(f"本のダウンロード中にエラーが発生しました: {e}")
 ```
 
-```python
-# TODO:
-```
 
 ```python
-# TODO:
+# Gemini のモデルパラメータなどを設定して、チャットセッションを作成
+chat = client.chats.create(
+    model=MODEL_ID,
+    config=types.GenerateContentConfig(
+        system_instruction="あなたは大阪に住むユーモアあふれる書評家です。",
+        temperature=1.2,  # 少しユニークな回答
+    )
+)
+# 保存したファイルをアップロード
+myfile = client.files.upload(file="alice_in_wonderland.txt")
+# プロンプトの作成
+prompt = f"""この本の要点を 5 つ、箇条書きで簡潔にまとめてください。
+
+要約:
+"""
+
+response = chat.send_message([prompt, myfile])
+print(prompt)
+print(response.text)
 ```
 
-## まとめと次のステップ
 
-**学習したこと:**
-- 単一プロンプトに対する `client.models.generate_content()` を使用した基本的なテキスト生成
-- より良いリソース管理のためのトークンカウントとコスト見積もり
-- ユーザーエクスペリエnciaを向上させるための `generate_content_stream()` を使用したストリーミング応答
-- `client.chats.create()` とチャットセッションを使用したマルチターン会話
-- 一貫したモデルの動作と個性のためのシステムインストラクション
-- 応答を微調整するための生成設定パラメータ
-- File APIを使用した長いコンテキストの処理とファイルのアップロード
-- 本番アプリケーションのエラー処理とベストプラクティス
+```python
+response = chat.send_message("X での投稿を作成してください。")
+print(response.text)
+```
 
-**重要なポイント:**
-- トークンの使用状況を監視してコストを管理し、制限内に収める
-- インタラクティブなアプリケーションと長い応答にはストリーミングを使用する
-- ユースケース（事実に基づいたコンテンツか創造的なコンテンツか）に基づいてパラメータを設定する
-- 堅牢なアプリケーションのために適切なエラー処理を実装する
-- システムインストラクションは、動作とトーンを設定するのに強力です
 
-**次のステップ:** [パート2：マルチモーダル機能](https://github.com/philschmid/gemini-2.5-ai-engineering-workshop/blob/main/notebooks/02-multimodal-capabilities.ipynb) に進みます [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/philschmid/gemini-2.5-ai-engineering-workshop/blob/main/notebooks/02-multimodal-capabilities.ipynb)
-
-**その他のリソース:**
-- [テキスト生成ガイド](https://ai.google.dev/gemini-api/docs/text-generation)
-- [トークンカウントガイド](https://ai.google.dev/gemini-api/docs/tokens)
-- [長いコンテキストのドキュメント](https://ai.google.dev/gemini-api/docs/long-context)
-- [File API ドキュメント](https://ai.google.dev/gemini-api/docs/files)
+```python
+# TODO: 
+# これまでのコードを参考にして、さまざまなテキストを生成してみましょう。
+# 
+```
