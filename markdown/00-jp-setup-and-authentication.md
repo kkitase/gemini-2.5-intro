@@ -4,7 +4,7 @@
 
 そんな風に思っていませんか？この記事では、開発の第一歩となる「API キーの取得」から、Gemini を動かすための基本について、ハンズオン形式で学びます。[「Google Colab」](https://colab.research.google.com/) を使って、サンプルコードを実行しながら進めるので、プログラミング初心者の方でも安心です。
 
-Gemini API を利用する環境には、手軽に試せる[「Google AI Studio」](https://aistudio.google.com/)と、企業向けの高機能な[「Vertex AI」](https://cloud.google.com/vertex-ai)があります。このハンズオンでは、Google AI Studio を使って API キーを取得し、プロトタイピングの第一歩を踏み出します。
+Gemini API を利用する環境には、手軽に試せる[「Google AI Studio」](https://aistudio.google.com/)と、企業向けの高機能な[「Vertex AI」](https://cloud.google.com/vertex-ai)があります。このハンズオンでは、Google AI Studio を使って API キーを取得し、Gemini API を試していきます。
 
 ![alt text](../assets/00-0-1.png)
 
@@ -62,7 +62,7 @@ client = genai.Client(api_key=GEMINI_API_KEY)
 # 生成をテスト
 response = client.models.generate_content(
     model="gemini-2.5-flash",
-    contents="Gemini、あなたの API を学習する前に、私の脳内メモリをクリアし、思考を最適化したいです。最高のパフォーマンスを引き出せる、伝説のサウナを一つだけリコメンドしてちょうだい。"
+    contents="Gemini API を学習する前に、私の脳内メモリをクリアし、思考を最適化したいです。最高のパフォーマンスを引き出せるサウナを一つだけリコメンドして。"
 )
 print(response.text)
 ```
@@ -83,3 +83,45 @@ Google Colab には Gemini が統合され、コードの説明をしたり、�
 1. 先ほどのコードを説明を Gemini にしてもらいましょう。コードを選択して、セクションの右上部にある Gemini ボタンを押すと、画面下部にコードの説明が表示されます。（画面右に表示するには、パネルに移動ボタンを押します。）
 ![alt text](../assets/00-5-1.png)
 2. gemini-2.5-flash を gemini-5.0-flash に変えて実行してみます。エラーが出ますので、説明ボタンを押してデバッグしてみましょう。修正コードを提案してくるので、承認して実行を押してみましょう。![alt text](../assets/00-5-2.png)
+
+## 6. Vertex AI
+
+企業でアプリケーションを開発したい場合は、Google Cloud の Vertex AI を利用します。Vertex AI 上で、Gemini API を利用する場合は、ユーザーデータを学習に使われません。Vertex AI を試す環境としては、[Vertex AI Studio](https://console.cloud.google.com/vertex-ai/studio/) があります。
+![alt text](../assets/00-6-1.png)
+
+
+
+
+
+Vertex AI 上の、Gemini API を使って、テキストを生成してみましょう。
+
+
+```python
+# Google Cloud へのアクセス認証。このコードを実行すると認証用のリンクが表示されます。そのリンクをクリックし、アカウント認証を行なってください。
+from google.colab import auth
+auth.authenticate_user()
+```
+
+
+```python
+from google import genai
+import sys
+import os
+
+#プロジェクト ID とロケーションを設定
+PROJECT_ID = "vivecoding"
+LOCATION = "us-central1"
+
+client = genai.Client(
+     vertexai=True, project=PROJECT_ID, location=LOCATION
+)
+
+# 生成をテスト
+response = client.models.generate_content(
+    model="gemini-2.5-flash",
+    contents="Gemini、あなたの API を学習する前に、私の脳内メモリをクリアし、思考を最適化したいです。最高のパフォーマンスを引き出せる、伝説のサウナを一つだけリコメンドしてちょうだい。"
+)
+
+print(response.text)
+
+```
