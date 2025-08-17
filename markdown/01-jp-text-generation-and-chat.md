@@ -8,7 +8,9 @@
 
 以降の解説は、Google Colab で実際にコードを実行しながら進めることを想定していますが、コードと解説を読み進めるだけでも学習できます。
 
-[セットアップと認証](00-jp-setup-and-authentication.ipynb) のセクションを完了していることを確認してください。
+## 重要: 環境の準備
+- [セットアップと認証](00-jp-setup-and-authentication.ipynb#scrollTo=bfd5d261) のセクションを完了していることを確認してください。
+- もしエラーが出たら、[Gemini in Google Colab](00-jp-setup-and-authentication.ipynb#scrollTo=7d140654) を使い、コードの説明やデバッグをして解決を試みてください。
 
 ## 1. 最初のプロンプト
 

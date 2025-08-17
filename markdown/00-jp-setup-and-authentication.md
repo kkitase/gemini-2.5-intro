@@ -41,7 +41,11 @@ Gemini API を利用する環境には、手軽に試せる[「Google AI Studio�
 
 
 ```python
+# Gemini API を Pythonで利用するためのライブラリをインポート
+# これにより、テキスト生成、翻訳、要約などの機能を利用できます。
 from google import genai
+
+# Google Colab でのユーザーデータを利用するためのライブラリをインポート
 from google.colab import userdata
 
 # Google Colab のユーザーデータから API キーを取得
@@ -88,16 +92,17 @@ Vertex AI 上の、Gemini API を使って、テキストを生成してみま�
 
 
 ```python
-# Google Cloud へのアクセス認証。このコードを実行すると認証用のリンクが表示されます。そのリンクをクリックし、アカウント認証を行なってください。
+# Google Cloud へのアクセス認証。
+# このコードを実行すると認証用のリンクが表示されます。そのリンクをクリックし、アカウント認証を行なってください。
 from google.colab import auth
 auth.authenticate_user()
 ```
 
 
 ```python
+# Gemini API を Pythonで利用するためのライブラリをインポート
+# これにより、テキスト生成、翻訳、要約などの機能を利用できます。
 from google import genai
-import sys
-import os
 
 # Google Cloud のプロジェクト ID とロケーションを設定
 PROJECT_ID = "" # @param {type:"string"}
