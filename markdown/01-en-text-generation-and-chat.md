@@ -1,4 +1,3 @@
-
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/philschmid/gemini-2.5-ai-engineering-workshop/blob/main/notebooks/01-text-generation-and-chat.ipynb)
 
 # Part 1 - Text Generation and Chat
@@ -6,6 +5,7 @@
 This part focuses on text generation with the Gemini API using the `google-genai` SDK, including basic prompts, chat interactions, streaming, and configuration.
 
 Make sure you have completed the [setup and authentication](solution_00_setup_and_authentication.md) section.
+
 
 ```python
 from google import genai
@@ -27,6 +27,7 @@ client = genai.Client(api_key=GEMINI_API_KEY)
 
 ## 1. Send Your First Prompt
 
+
 ```python
 prompt = "Create 3 names for a new coffee shop that emphasizes sustainability."
 
@@ -39,7 +40,7 @@ print("Response from Gemini:")
 print(response.text)
 ```
 
-#### !! Exercise: Sending Various Prompts !!
+#### **!! Exercise: Sending Various Prompts !!**
 
 Practice sending different types of prompts to the Gemini model and observe its responses. You can also experiment with different model versions if they are available to you.
 
@@ -47,6 +48,7 @@ Tasks:
 - Write a prompt to ask Gemini to generate a short poem about a robot.
 - Write a prompt to ask Gemini to explain "machine learning" in simple terms.
 - Try other models (e.g., `gemini-2.0-flash`) and send your prompts to them and compare the results.
+
 
 ```python
 # TODO:
@@ -64,6 +66,7 @@ For Gemini models, a token is equivalent to about 4 characters, and 100 tokens e
 ### Count tokens before generation
 
 You can count tokens in your input before sending it to the model to estimate costs and ensure you stay within limits:
+
 
 ```python
 prompt = "The quick brown fox jumps over the lazy dog."
@@ -85,6 +88,7 @@ print(f"Estimated input cost: ${estimated_cost:.6f}")
 ### Count tokens after generation
 
 After generating content, you can access detailed token usage information:
+
 
 ```python
 prompt = "Write a haiku about artificial intelligence."
@@ -111,6 +115,7 @@ print(f"Total estimated cost: ${total_cost:.6f}")
 
 The simplest way to generate text is to provide the model with a text-only prompt. `contents` can be a single prompt, a list of prompts, or a combination of multimodal inputs.
 
+
 ```python
 response_capital = client.models.generate_content(
     model=MODEL_ID,
@@ -118,6 +123,7 @@ response_capital = client.models.generate_content(
 )
 print(f"Q: What is the capital of France?\nA: {response_capital.text}")
 ```
+
 
 ```python
 # TODO: Call the client.models.generate_content() method.
@@ -141,6 +147,7 @@ Streaming allows you to receive responses incrementally as they're generated, pr
 - Real-time user feedback
 - Improved perceived performance
 
+
 ```python
 prompt_long_story = "Write a short story about a brave knight and a friendly dragon."
 
@@ -158,6 +165,7 @@ print("\n")  # Add newline at the end
 
 The SDK chat class provides an interface to keep track of conversation history. Behind the scenes it uses the same `generate_content` method.
 
+
 ```python
 chat_session = client.chats.create(model=MODEL_ID)
 
@@ -167,12 +175,14 @@ response1 = chat_session.send_message(message=user_message1)
 print(f"Model: {response1.text}\n")
 ```
 
+
 ```python
 user_message2 = "I like history and good food. Not too expensive."
 print(f"User: {user_message2}")
 # TODO: Call the chat_session.send_message() method with user_message2.
 # response2 = chat_session.send_message(message=...)
 ```
+
 
 ```python
 # View conversation history
@@ -190,6 +200,7 @@ System instructions let you define the model's behavior and personality. They're
 - Include formatting preferences
 - Set behavioral guidelines
 
+
 ```python
 system_instruction_poet = "You are a renowned poet from the 17th century, specializing in sonnets. Respond in iambic pentameter and use eloquent, period-appropriate language."
 
@@ -206,6 +217,7 @@ print(f"\nPoet model on modern tech:\n{response_poet.text}")
 ## 7. Generation Configuration
 
 Customize the generation behavior using configuration parameters. Understanding these helps you fine-tune responses for your specific use case.
+
 
 ```python
 # Configuration using dictionary
@@ -244,6 +256,7 @@ Gemini 2.5 Pro has a 1M token context window. In practice, 1 million tokens coul
 
 The File API allows you to upload files to the Gemini API and use them as context for your requests.
 
+
 ```python
 # Example with a text file (more reliable than the audio example)
 import requests
@@ -264,7 +277,8 @@ try:
     # Generate content using the uploaded file as context
     response = client.models.generate_content(
         model=MODEL_ID, 
-        contents=[myfile, "Summarize this book in 3 key points"])
+        contents=[myfile, "Summarize this book in 3 key points"]
+    )
     
     print("Summary:")
     print(response.text)
@@ -288,6 +302,7 @@ Task:
 - Send an initial message to the chat session using `chat.send_message()`:
 - Send at least one follow-up question to the chat session (e.g., "Explain the various methods of speech delivery in more detail") and print its response.
 
+
 ```python
 import requests
 
@@ -305,9 +320,11 @@ except requests.RequestException as e:
     print(f"Error downloading book: {e}")
 ```
 
+
 ```python
 # TODO:
 ```
+
 
 ```python
 # TODO:
