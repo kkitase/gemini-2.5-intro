@@ -5,6 +5,7 @@
 ## 0. Google AI Studio 
 
 [Google AI Studio](https://aistudio.google.com/) は、Google の Gemini モデルを素早く試すことができる開発者向けプラットフォームです。使いやすいインターフェースでプロンプトの作成やテスト、モデルのパラメータ調整を行い、そのコードを簡単にエクスポートしてご自身のアプリケーションに組み込むことができます。SDK を使って本格的なコーディングを始める前に、Google の AI モデルの能力を試したり、プロトタイプを作成したりするのに最適なツールです。このワークショップでは、API キーを取得するために `Google AI Studio` を使用します。
+![alt text](../assets/jp-0-1-ai-studio.png)
 
 ## １. Gemini API キーを入手し、Google Colab に設定する
 
@@ -13,7 +14,7 @@
 1.  **Google AI Studio にアクセス**: ウェブブラウザで [Google AI Studio](https://aistudio.google.com/apikey) にアクセスします。
 2.  **API キーの取得**: 画面の指示に従って、新しい API キーを作成します。このキーは、アプリケーションから Gemini を呼び出すための「鍵」の役割を果たします。大切に保管してください。
 3.  Google Colab で左のパネルから、シークレットタブ（🔑）を開きます。
-![alt text](<../image/ScreenShot 2025-08-13 13.59.19.png>)
+![alt text](../assets/jp-1-1-api-key.png)
 4.  `GEMINI_API_KEY` という名前で、新しいシークレットキーを作成します。
 5.  `GEMINI_API_KEY` の「値 (Value)」入力欄に、先ほど作成した Gemini API キーをコピーして貼り付けます。
 6.  左側にあるトグルボタンをオンに切り替えて、すべてのノートブックがこのシークレットにアクセスできるように許可します。
@@ -25,7 +26,7 @@
 ```python
 %pip install -U -q 'google-genai>=1.0.0'
 ```
-![alt text](<../image/ScreenShot 2025-08-13 13.36.30.png>)
+![alt text](../assets/jp-2-1-sdk-install.png)
 
 ## 3. クライアントの設定と生成のテスト
 
