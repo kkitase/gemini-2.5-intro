@@ -108,9 +108,9 @@ from google import genai
 import sys
 import os
 
-#プロジェクト ID とロケーションを設定
-PROJECT_ID = "vivecoding"
-LOCATION = "us-central1"
+# Google Cloud のプロジェクト ID とロケーションを設定
+PROJECT_ID = "" # @param {type:"string"}
+LOCATION = "" # @param ["asia-northeast1", "us-central1", "europe-west4"] {allow-input: true}
 
 client = genai.Client(
      vertexai=True, project=PROJECT_ID, location=LOCATION
@@ -123,5 +123,4 @@ response = client.models.generate_content(
 )
 
 print(response.text)
-
 ```
