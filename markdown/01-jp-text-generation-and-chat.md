@@ -4,7 +4,7 @@
 
 以下のボタンから Notebook を開いて進めましょう。
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/kkitase/gemini-2.5-findy/blob/main/notebooks/01-jp-text-generation-and-chat-jp.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/kkitase/gemini-2.5-findy/blob/main/notebooks/01-jp-text-generation-and-chat.ipynb)
 
 以降の解説は、Google Colab で実際にコードを実行しながら進めることを想定していますが、コードと解説を読み進めるだけでも学習できます。
 
@@ -17,20 +17,16 @@
 
 ```python
 from google import genai
-from google.genai import types
-import os
-import sys
-IN_COLAB = 'google.colab' in sys.modules
+from google.colab import userdata
 
-if IN_COLAB:
-    from google.colab import userdata
-    GEMINI_API_KEY = userdata.get('GEMINI_API_KEY')
-else:
-    GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY',None)
+# Google Colab のユーザーデータから API キーを取得
+GEMINI_API_KEY = userdata.get('GEMINI_API_KEY')
 
-# APIキーでクライアントを作成
-MODEL_ID = "gemini-2.5-flash"
+# API キーを使ってクライアントを作成
 client = genai.Client(api_key=GEMINI_API_KEY)
+
+# モデル ID を設定
+MODEL_ID = "gemini-2.5-flash" # @param ["gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-2.5-pro"] {allow-input: true}
 ```
 
 次に、プロンプトを作成して、テキストを生成します。

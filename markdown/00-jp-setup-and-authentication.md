@@ -42,19 +42,10 @@ Gemini API を利用する環境には、手軽に試せる[「Google AI Studio�
 
 ```python
 from google import genai
-import sys
-import os
+from google.colab import userdata
 
-# Colab 環境で実行されているかどうかの判定
-IN_COLAB = 'google.colab' in sys.modules
-
-if IN_COLAB:
-    from google.colab import userdata
-    # Colab のシークレットから API キーを取得
-    GEMINI_API_KEY = userdata.get('GEMINI_API_KEY')
-else:
-    # 環境変数から API キーを取得
-    GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', None)
+# Google Colab のユーザーデータから API キーを取得
+GEMINI_API_KEY = userdata.get('GEMINI_API_KEY')
 
 # API キーを使ってクライアントを作成
 client = genai.Client(api_key=GEMINI_API_KEY)
