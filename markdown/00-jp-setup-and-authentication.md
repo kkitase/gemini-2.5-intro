@@ -5,7 +5,7 @@
 ## 0. Google AI Studio 
 
 [Google AI Studio](https://aistudio.google.com/) は、Google の Gemini モデルを素早く試すことができる開発者向けプラットフォームです。使いやすいインターフェースでプロンプトの作成やテスト、モデルのパラメータ調整を行い、そのコードを簡単にエクスポートしてご自身のアプリケーションに組み込むことができます。SDK を使って本格的なコーディングを始める前に、Google の AI モデルの能力を試したり、プロトタイプを作成したりするのに最適なツールです。このワークショップでは、API キーを取得するために `Google AI Studio` を使用します。
-![alt text](../assets/jp-0-1-ai-studio.png)
+![alt text](../assets/00-0-1.png)
 
 ## １. Gemini API キーを入手し、Google Colab に設定する
 
@@ -14,7 +14,7 @@
 1.  **Google AI Studio にアクセス**: ウェブブラウザで [Google AI Studio](https://aistudio.google.com/apikey) にアクセスします。
 2.  **API キーの取得**: 画面の指示に従って、新しい API キーを作成します。このキーは、アプリケーションから Gemini を呼び出すための「鍵」の役割を果たします。大切に保管してください。
 3.  Google Colab で左のパネルから、シークレットタブ（🔑）を開きます。
-![alt text](../assets/jp-1-1-api-key.png)
+![alt text](../assets/00-1-1.png)
 4.  `GEMINI_API_KEY` という名前で、新しいシークレットキーを作成します。
 5.  `GEMINI_API_KEY` の「値 (Value)」入力欄に、先ほど作成した Gemini API キーをコピーして貼り付けます。
 6.  左側にあるトグルボタンをオンに切り替えて、すべてのノートブックがこのシークレットにアクセスできるように許可します。
@@ -26,7 +26,7 @@
 ```python
 %pip install -U -q 'google-genai>=1.0.0'
 ```
-![alt text](../assets/jp-2-1-sdk-install.png)
+![alt text](../assets/00-2-1.png)
 
 ## 3. クライアントの設定と生成のテスト
 
@@ -73,10 +73,5 @@ print(response.text)
 Google Colab は Gemini が統合され、コードの説明をしたり、デバッグするのに役立ちます。
 
 1. 先ほどのコードを説明を Gemini にしてもらいましょう。コードを選択して、セクションの右上部にある Gemini ボタンを押すと、画面下部にコードの説明が表示されます。（画面右に表示するには、パネルに移動ボタンを押します。）
-![alt text](../assets/5-1.png)
-2. gemini-2.5-flash を gemini-5.0-flash に変えて実行してみます。エラーが出ますので、説明ボタンを押してデバッグしてみましょう。修正コードを提案してくるので、承認して実行を押してみましょう。![alt text](../assets/5-2.png)
-
-**関連リソース:**
-- [Gemini API ドキュメント クイックスタート](https://ai.google.dev/gemini-api/docs/quickstart?lang=python&hl=ja)
-- [利用可能なモデルの概要](https://ai.google.dev/gemini-api/docs/models)
-- [Google AI Studio](https://aistudio.google.com/)
+![alt text](../assets/00-5-1.png)
+2. gemini-2.5-flash を gemini-5.0-flash に変えて実行してみます。エラーが出ますので、説明ボタンを押してデバッグしてみましょう。修正コードを提案してくるので、承認して実行を押してみましょう。![alt text](../assets/00-5-2.png)
