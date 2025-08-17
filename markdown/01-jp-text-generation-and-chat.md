@@ -9,8 +9,8 @@
 以降の解説は、Google Colab で実際にコードを実行しながら進めることを想定していますが、コードと解説を読み進めるだけでも学習できます。
 
 ## 重要: 環境の準備
-- [セットアップと認証](00-jp-setup-and-authentication.ipynb#scrollTo=bfd5d261) のセクションを完了していることを確認してください。
-- もしエラーが出たら、[Gemini in Google Colab](00-jp-setup-and-authentication.ipynb#scrollTo=7d140654) を使い、コードの説明やデバッグをして解決を試みてください。
+- [セットアップと認証](https://colab.research.google.com/github/kkitase/gemini-2.5-findy/blob/main/notebooks/00-jp-setup-and-authentication.ipynb#scrollTo=bfd5d261) のセクションを完了していることを確認してください。
+- もしエラーが出たら、[Gemini in Google Colab](https://colab.research.google.com/github/kkitase/gemini-2.5-findy/blob/main/notebooks/00-jp-setup-and-authentication.ipynb#scrollTo=7d140654) を使い、コードの説明やデバッグをして解決を試みてください。
 
 ## 1. 最初のプロンプト
 
@@ -18,7 +18,11 @@
 
 
 ```python
+# Gemini API を Pythonで利用するためのライブラリをインポート
+# これにより、テキスト生成、翻訳、要約などの機能を利用できます。
 from google import genai
+
+# Google Colab でのユーザーデータを利用するためのライブラリをインポート
 from google.colab import userdata
 
 # Google Colab のユーザーデータから API キーを取得
