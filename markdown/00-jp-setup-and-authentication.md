@@ -30,6 +30,8 @@
 
 ## 3. クライアントの設定と生成のテスト
 
+それでは、Gemini API を使って、テキストを生成してみましょう。
+
 ```python
 from google import genai
 import sys
@@ -52,7 +54,7 @@ client = genai.Client(api_key=GEMINI_API_KEY)
 # 生成をテスト
 response = client.models.generate_content(
     model="gemini-2.5-flash",
-    contents="Hello, world!"
+    contents="Gemini、あなたの API を学習する前に、私の脳内メモリをクリアし、思考を最適化したいです。最高のパフォーマンスを引き出せる、伝説のサウナを一つだけリコメンドしてちょうだい。"
 )
 print(response.text)
 ```
@@ -67,14 +69,12 @@ print(response.text)
 | Gemini 2.5 Flash | `gemini-2.5-flash` |
 | Gemini 2.5 Pro | `gemini-2.5-pro` |
 
-## まとめと次のステップ
+## 5. Google Colab と Gemini
+Google Colab は Gemini が統合され、コードの説明をしたり、デバッグするのに役立ちます。
 
-**このパートで学んだこと:**
-- `Google AI Studio` を開発の実験場としてセットアップする方法
-- `Gemini API` キーを取得し、安全に管理する方法
-- `google-genai` Python SDK をインストールし、設定する方法
-- 接続をテストするための最初の API 呼び出し
-- 利用可能な `Gemini` モデルとその機能についての理解
+1. 先ほどのコードを説明を Gemini にしてもらいましょう。コードを選択して、セクションの右上部にある Gemini ボタンを押すと、画面下部にコードの説明が表示されます。（画面右に表示するには、パネルに移動ボタンを押します。）
+![alt text](../assets/5-1.png)
+2. gemini-2.5-flash を gemini-5.0-flash に変えて実行してみます。エラーが出ますので、説明ボタンを押してデバッグしてみましょう。修正コードを提案してくるので、承認して実行を押してみましょう。![alt text](../assets/5-2.png)
 
 **関連リソース:**
 - [Gemini API ドキュメント クイックスタート](https://ai.google.dev/gemini-api/docs/quickstart?lang=python&hl=ja)
