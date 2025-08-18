@@ -110,7 +110,8 @@ print(f"思考トークン: {usage.thoughts_token_count}")
 print(f"出力トークン: {usage.candidates_token_count}")
 
 # 合計推定コストを計算する
-total_cost = (usage.prompt_token_count * 0.15 + (usage.candidates_token_count + usage.thoughts_token_count) * 3.5) / 1_000_000
+total_cost = (usage.prompt_token_count * 0.15 + ((usage.candidates_token_count if usage.candidates_token_count is not None else 0) + (usage.thoughts_token_count if usage.thoughts_token_count is not None else 0)) * 3.5) / 1_000_000
+
 print(f"合計推定コスト: ${total_cost:.6f}")
 ```
 
@@ -174,24 +175,26 @@ chat クラスは、会話履歴を追跡するためのインターフェース
 ```python
 chat_session = client.chats.create(model=MODEL_ID)
 
-user_message1 = "ヨーロッパ旅行を計画しています。おすすめはありますか？"
-print(f"ユーザー: {user_message1}")
-response1 = chat_session.send_message(message=user_message1)
-print(f"モデル: {response1.text}\n")
+user_message = "ヨーロッパ旅行を計画しています。おすすめはありますか？"
+print(f"ユーザー: {user_message}")
+response= chat_session.send_message(message=user_message)
+print(f"モデル: {response.text}\n")
 ```
 
 
 ```python
-user_message2 = "ニョッキが好きです。あまり高価じゃないものがいいです。"
-print(f"ユーザー: {user_message2}")
-response2 = chat_session.send_message(message=user_message2)
-print(f"モデル: {response2.text}\n")
+user_message = "ニョッキが好きです。あまり高価じゃないものがいいです。"
+print(f"ユーザー: {user_message}")
+response = chat_session.send_message(message=user_message)
+print(f"モデル: {response.text}\n")
 ```
 
 
 ```python
-user_message3 = "サウナはありますか？"
-print(f"ユーザー: {user_message3}")
+user_message = "サウナはありますか？"
+print(f"ユーザー: {user_message}")
+response = chat_session.send_message(message=user_message)
+print(f"モデル: {response.text}\n")
 ```
 
 
@@ -220,8 +223,12 @@ print(f"会話の合計メッセージ数: {len(history)}")
 
 
 ```python
-# システム インストラクションを使って、ロールやフォーマットを指定してみましょう。
+# google.generativeai ライブラリから types をインポート
+# types には Google Generative AI SDK 内で使用される様々なデータ構造や型が含まれています。
+# 例えば、system_instruction や、後述の temperature, max_output_tokens, top_p, top_k など。
+from google.generativeai import types
 
+# システム インストラクションを使って、ロールやフォーマットを指定
 system_instruction_marketing_pro = """
 # 役割
 あなたは、全く新しいフィットネスブランドを立ち上げる、マーケティングのプロです。
@@ -244,9 +251,9 @@ system_instruction_marketing_pro = """
 response_pro = client.models.generate_content(
     model=MODEL_ID,
     contents="全く新しいフィットネスジムとその名前を考えて",
-    config=types.GenerateContentConfig(
-        system_instruction=system_instruction_marketing_pro
-    )
+    config={
+        "system_instruction": system_instruction_marketing_pro
+    }
 )
 
 print(response_pro.text)
@@ -367,10 +374,10 @@ except requests.RequestException as e:
 # Gemini のモデルパラメータなどを設定して、チャットセッションを作成
 chat = client.chats.create(
     model=MODEL_ID,
-    config=types.GenerateContentConfig(
-        system_instruction="あなたは大阪に住むユーモアあふれる書評家です。",
-        temperature=1.2,  # 少しユニークな回答
-    )
+    config={
+        "system_instruction": "あなたは大阪に住むユーモアあふれる書評家です。",
+        "temperature": 1.2,  # 少しユニークな回答
+    }
 )
 # 保存したファイルをアップロード
 myfile = client.files.upload(file="alice_in_wonderland.txt")
