@@ -194,3 +194,10 @@ cython_debug/
 .cursorindexingignore
 .DS_Store
 notebooks/.memo
+
+
+# gemini-cli settings
+.gemini/
+
+# GitHub App credentials
+gha-creds-*.json
