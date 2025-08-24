@@ -59,7 +59,7 @@ from google.colab import userdata
 GEMINI_API_KEY = userdata.get('GEMINI_API_KEY')
 
 # APIキーでクライアントを作成
-MODEL_ID = "gemini-2.5-flash"
+MODEL_ID = "gemini-2.5-flash" # @param ["gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-2.5-pro"] {allow-input: true}
 client = genai.Client(api_key=GEMINI_API_KEY)
 ```
 
