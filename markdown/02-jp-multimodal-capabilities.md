@@ -85,7 +85,7 @@ response_specific = client.models.generate_content(
 print(response_specific.text)
 ```
 
-### File APIを使って画像解析
+### File API を使って画像解析
 20MB を超える大きなペイロードには File API を使用できます。
 
 
