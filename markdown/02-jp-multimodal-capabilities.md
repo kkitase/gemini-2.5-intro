@@ -18,17 +18,29 @@
 - もしエラーが出たら、[Gemini in Google Colab](https://colab.research.google.com/github/kkitase/gemini-2.5-findy/blob/main/notebooks/00-jp-setup-and-authentication.ipynb#scrollTo=7d140654) を使い、コードの説明やデバッグをして解決を試みてください。
 
 
-## 画像処理を行う準備
-これから画像処理を行うので、必要なツールやライブラリのインストールなど、準備をします。
+### 学習のためのリポジトリをクローン
+```python
+!git clone https://github.com/kkitase/gemini-2.5-findy.git
+%cd gemini-2.5-findy
+```
+
+## 1. 画像理解: 単一の画像
+
+Gemini は、PIL `Image` オブジェクト、画像のローデータ、または File API を使ってアップロードされたファイルなど、複数の形式の画像を分析できます。
+
+**各メソッドの使い分け:**
+- **画像のローデータ**: API やメモリからの画像データを扱う場合
+- **File API**: 20MB を超える大きな画像や、複数のリクエストで画像を再利用したい場合
+
+
+### 画像処理を行う準備
+画像処理を行うために必要なツールやライブラリのインストールなど、準備をします。
 
 ```python
 # 画像処理ライブラリPillowをインストール
 %pip install pillow
-
-# 学習のためのリポジトリをクローン
-!git clone https://github.com/kkitase/gemini-2.5-findy.git
-%cd gemini-2.5-findy
 ```
+
 
 ```python
 # Gemini APIとHTTPリクエスト用のライブラリをインポート
@@ -51,21 +63,13 @@ MODEL_ID = "gemini-2.5-flash"
 client = genai.Client(api_key=GEMINI_API_KEY)
 ```
 
-## 1. 画像理解: 単一の画像
-
-Gemini は、PIL `Image` オブジェクト、画像のローデータ、または File API を使ってアップロードされたファイルなど、複数の形式の画像を分析できます。
-
-**各メソッドの使い分け:**
-- **画像のローデータ**: API やメモリからの画像データを扱う場合
-- **File API**: 20MB を超える大きな画像や、複数のリクエストで画像を再利用したい場合
-
 
 ```python
 # サンプル画像をダウンロードします
 !curl -o image.jpg "https://storage.googleapis.com/generativeai-downloads/images/Cupcakes.jpg"
 ```
 
-
+### バイナリデータを読み込んで画像解析
 ```python
 # 画像ファイルをバイナリモードで開き、その内容を読み込みます
 with open('image.jpg', 'rb') as f:
@@ -81,6 +85,7 @@ response_specific = client.models.generate_content(
 print(response_specific.text)
 ```
 
+### File APIを使って画像解析
 20MB を超える大きなペイロードには File API を使用できます。
 
 > File API を使用すると、プロジェクトごとに最大 20 GB のファイルを保存でき、ファイルごとの最大サイズは 2 GB です。ファイルは 48 時間保存されます。その期間中は API キーでアクセスできますが、API からダウンロードすることはできません。Gemini API が利用可能なすべてのリージョンで無料で利用できます。
@@ -102,6 +107,7 @@ print(response.text)
 
 > File API を使用すると、プロジェクトごとに最大 20 GB のファイルを保存でき、ファイルごとの最大サイズは 2 GB です。ファイルは 48 時間保存されます。その期間中は API キーでアクセスできますが、API からダウンロードすることはできません。Gemini API が利用可能なすべてのリージョンで無料で利用できます。
 
+
 ## 2. 画像理解: 複数の画像
 
 Gemini は複数の画像を同時に分析および比較できます。これは、比較分析、視覚的なストーリーテリング、または一連の出来事の理解に強力です。
@@ -116,14 +122,6 @@ image_url_2 = "https://images.pexels.com/photos/2071882/pexels-photo-2071882.jpe
 image_response_req_1 = requests.get(image_url_1)
 image_response_req_2 = requests.get(image_url_2)
 
-
-# TODO: client.models.generate_content() を呼び出して 2 つの画像を比較します。
-# contents は以下の要素を含むリストにする必要があります:
-# 1. テキストパート: "この2つの画像を比較してください。それぞれの主な被写体は何で、何をしていますか？"
-# 2. テキストパート: "画像 1:"
-# 3. パートとしての画像 1 のバイト: types.Part.from_bytes(data=image_response_req_1.content, mime_type="image/jpeg")
-# 4. テキストパート: "画像 2:"
-# 5. パートとしての画像 2 のバイト: types.Part.from_bytes(data=image_response_req_2.content, mime_type="image/jpeg")
 response_multi = client.models.generate_content(
      model=MODEL_ID,
      contents=[
@@ -306,7 +304,7 @@ response = client.models.generate_content(
 print(response.text)
 ```
 
-## 7. PDF/ドキュメントファイルの操作
+## 6. PDF/ドキュメントファイルの操作
 
 Gemini は PDF などドキュメントの情報を抽出できるため、ドキュメント分析、データ抽出、コンテンツ要約に優れています。
 
