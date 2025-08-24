@@ -287,7 +287,7 @@ response = client.models.generate_content(
 print(response.text)
 ```
 
-## 5. PDF/ドキュメントファイルの操作
+## 5. PDF などドキュメントファイルの操作
 
 Gemini は PDF などドキュメントの情報を抽出できるため、ドキュメント分析、データ抽出、コンテンツ要約に優れています。
 
