@@ -10,6 +10,7 @@
 - **マルチモーダル生成**: テキストプロンプトからの画像と音声の作成
 
 以降の解説は、Google Colab で実際にコードを実行しながら進めることを想定していますが、コードと解説を読み進めるだけでも学習できます。
+
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/kkitase/gemini-2.5-findy/blob/main/notebooks/02-jp-multimodal-capabilities.ipynb)
 
 ## 重要: 環境の準備
